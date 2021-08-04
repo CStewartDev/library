@@ -1,6 +1,5 @@
 const library = document.querySelector('.library');
-console.log(library);
-
+const newBtn = document.querySelector('.addBook')
 const myLibrary = [];
 
 function Book(title,author,pages,hasRead) {
@@ -18,14 +17,17 @@ function addBooktoLibrary(title,author,pages,hasRead){
 function makeCard(item){
     const newDiv = document.createElement("div");
     const newUl = document.createElement("ul");
+    newDiv.classList.add('bookCard')
     
     for(let prop in item) {
         const newLi = document.createElement("li");
-        const text = document.createTextNode(`${prop}: ${item[prop]}`)
+        const text = document.createTextNode(`${item[prop]}`)
         newLi.appendChild(text);
         newUl.appendChild(newLi);
     }
-    return newDiv.appendChild(newUl);
+    console.log(newDiv)
+    newDiv.appendChild(newUl);
+    return newDiv
     
 }
 
