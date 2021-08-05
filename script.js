@@ -1,10 +1,11 @@
 const library = document.querySelector('.library');
 const newBtn = document.querySelector('.addBookBtn');
-const bookModal = document.querySelector('.addBookPage')
-const modalx = document.querySelector('.modal-x')
-const modalAdd = document.querySelector('.addBookFormBtn')
-const modalForm = document.querySelector('.addBookForm')
-const myLibrary = [];
+const bookModal = document.querySelector('.addBookPage');
+const modalx = document.querySelector('.modal-x');
+const modalAdd = document.querySelector('.addBookFormBtn');
+const modalForm = document.querySelector('.addBookForm');
+let myLibrary = [];
+let ids = 1;
 let modalUp = false;
 
 function Book(title,author,pages,hasRead) {
@@ -12,11 +13,13 @@ function Book(title,author,pages,hasRead) {
     this.author=author;
     this.pages = `${pages} ${pages == 1 ?"page":"pages" }`;
     this.hasRead=hasRead;
-    this.del = null;
+    this.id = null; 
 }
 
 function addBooktoLibrary(title,author,pages,hasRead){
     let book = new Book(title,author,pages,hasRead);
+    book.id = `Book ${ids}`
+    ids++;
     myLibrary.push(book);
     addCardstoScreen(myLibrary[myLibrary.length-1])
 }
@@ -30,23 +33,42 @@ function makeCard(item){
     const newDiv = document.createElement("div");
     const modalBtnDiv = document.createElement('div');
     newDiv.classList.add('bookCard');
+    newDiv.id = item.id
     modalBtnDiv.classList.add('modalBtnDiv')
     for(let prop in item) {
         if(prop === "title" || prop === "author" || prop === "pages" ){
-            const newh = document.createElement("h3");
-            const text = document.createTextNode(`${item[prop]}`)
-            newh.appendChild(text);
-            newDiv.appendChild(newh);
-        }else if(prop === "hasRead" || prop === "del"){
+            const newh2 = document.createElement('h2');
+            const newh3 = document.createElement("h3");
+            const text = document.createTextNode(`${item[prop]}`);
+            if(prop === "title"){
+                newh2.appendChild(text);
+                newDiv.appendChild(newh2)
+            } else {
+                newh3.appendChild(text);
+                newDiv.appendChild(newh3);
+            }
+        }else if(prop === "hasRead"){ 
             const btns = `
-            <button class="formBtn" id="readBtn">
+            <button class="formBtn readBtn">
                 ${item[prop]?"Read":"Not Read"}</button> 
-            <button class="formBtn" id="delBtn">Delete?</button>`
+            <button class="formBtn delBtn">Delete?</button>`
             modalBtnDiv.innerHTML = btns;
             newDiv.appendChild(modalBtnDiv);
+            const readBtn = modalBtnDiv.firstElementChild;
+            const delBtn = modalBtnDiv.lastElementChild;
+            readBtn.addEventListener('click',e=>console.log(e.target))
+            delBtn.addEventListener('click',e=>this.deleteCard(item.id))
         }
     } 
     return newDiv  
+}
+
+function deleteCard (cardId){
+    console.log(cardId)
+    const toDelete = document.getElementById(cardId);
+    let boop = myLibrary.map(book=>book.id).indexOf(cardId);
+    myLibrary.splice(boop,1);
+    toDelete.remove();
 }
 
 function toggleModalAppearance(){
@@ -54,7 +76,7 @@ function toggleModalAppearance(){
     modalUp ? bookModal.style.display = 'flex' : bookModal.style.display = 'none';
 }
 
-function handleModalAdd(e){
+function handleModalAdd(){
     const title = document.getElementById('title').value;
     const author = document.getElementById('author').value;
     const pages = document.getElementById('pages').value;
