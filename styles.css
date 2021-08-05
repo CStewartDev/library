@@ -3,8 +3,11 @@ html{
     font-family: 'EB Garamond', serif;
 }
 
-body{
+body {
     min-height: 100vh;
+}
+
+.main-page{
     display: flex;
     flex-direction: column;
 }
@@ -23,16 +26,72 @@ body{
     max-width: 20em;
 }
 
-.addBook{
-    font-size: 2rem;
+.addBookBtn{
+    font-size: 1.25rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 4rem;
-    height: 4rem;
+    width: 3rem;
+    height: 3rem;
     background-color: tomato;
     color: white;
     margin-left: 1rem;
-    padding: .2rem;
-    border-radius: 25%;
+    border-radius: 30%;
+}
+
+.addBookPage{
+    display: flex;
+    z-index: 1;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.4);
+    align-items: center;
+    display: none;
+}
+
+.addBookForm {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: max-content;
+    background-color: antiquewhite;
+    padding: 1rem 3rem;
+}
+.addBookForm input{
+    margin: .2rem;
+}
+
+.addBookForm button {
+    margin: .3rem 0 .2rem 0;
+}
+
+
+.formBtn{
+    border-radius: 20px; 
+    background-image: linear-gradient( 90deg, orange, tomato, firebrick);
+    /* make the bg bigger */
+    background-size: 150%;
+    background-position: right top;
+    transition: background-position 500ms ease;
+    border: none;
+    color: aliceblue;
+    padding: .1rem .5rem;
+}
+
+.modal-head{
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-x{
+    font-size: 1.5rem;
+    border: 1px solid black;
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    line-height: 1.75rem;
+
 }
