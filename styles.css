@@ -27,6 +27,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding: 1rem;
 }
 
 .addBookBtn{
@@ -74,14 +75,19 @@ body {
 
 .formBtn{
     border-radius: 20px; 
-    background-image: linear-gradient( 90deg, orange, tomato, firebrick);
+    background-image: linear-gradient( 135deg, orange, tomato, firebrick);
     /* make the bg bigger */
-    background-size: 150%;
+    /* background-size: 150%; */
     background-position: right top;
-    transition: background-position 500ms ease;
     border: none;
     color: aliceblue;
     padding: .1rem .5rem;
+    margin-top: 1rem;
+    width: 6rem;
+}
+
+.read{
+    background-image: linear-gradient( 90deg, #95D5B2, #52B788, #2D6A4F);
 }
 
 .modal-head{
@@ -98,3 +104,17 @@ body {
     line-height: 1.75rem;
 
 }
+
+.modalBtnDiv{
+    display: flex;
+    justify-content: space-around;
+}
+
+.error {
+    border-color: red;
+  }
+  
+  .error-message {
+    color: red;
+    font-style: italic;
+  }

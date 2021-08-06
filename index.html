@@ -22,7 +22,7 @@
     </section>
     
     <section class="addBookPage">
-        <form class="addBookForm">
+        <form novalidate class="addBookForm">
             <div class='modal-head'>
                 <h2>Add Book Info</h2> <span class ='modal-x'> X </span>
             </div>
@@ -31,7 +31,7 @@
             <label for="author">Author:</label>
             <input type="text" name="Author" id="author" data-key="author" required>
             <label for="pages">Pages:</label>
-            <input type="number" name="Pages" id="pages" data-key="pages" min="1" required>
+            <input type="number" pattern="[-+]?[0-9]" name="Pages" id="pages" data-key="pages" min="1" required>
             <div>
                 <label for="hasRead">Have you read this title?:</label>
                 <input type="checkbox" name="hasRead" id="hasRead" data-key="hasRead" required>
