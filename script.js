@@ -25,6 +25,7 @@ function createBook(title,author,pages,hasRead) {
 
 function addBooktoLibrary(title,author,pages,hasRead){
     let book = createBook(title,author,pages,hasRead);
+    if(!localStorage.getItem("UID")) localStorage.setItem("UID","1");
     localStorage.setItem('UID',`${Number.parseFloat(localStorage.getItem("UID")) +1}`)
     if(!localStorage.getItem(book.id)) localStorage.setItem(book.id,JSON.stringify(book));
     addCardstoScreen(JSON.parse(localStorage[book.id]));
@@ -32,6 +33,7 @@ function addBooktoLibrary(title,author,pages,hasRead){
 
 function addCardstoScreen(book){
         const card = makeCard(book);
+        library.innerText = "";
         library.appendChild(card);
 }
 
@@ -182,8 +184,8 @@ function removeError (field) {
     if (!message) return;
 
     // If so, hide it
-    //message.innerHTML = '';
-    //message.style.display = 'none';
+    message.innerHTML = '';
+    message.style.display = 'none';
     message.style.visibility = 'hidden';
 };
 
@@ -204,6 +206,7 @@ function validateForm() {
             }
         }
     }
+
     // If there are errrors, don't submit form and focus on first element with error
     if (hasErrors) {
         hasErrors.focus();
@@ -224,13 +227,6 @@ function onLoad(){
 
 document.body.onload = onLoad;
 
-
-//Beginning data for cards
-//createBook("The Count of Monte Cristo","Alexandre Dumas",1316,true);
-// createBook("The Hobbit","J.R.R Tolkien",308,true);
-// createBook("LOTR: Fellowship of the Ring","J.R.R Tolkien",308,true);
-// createBook("LOTR: The Two Towers","J.R.R Tolkien",308,true);
-// createBook("LOTR: Return of the King","J.R.R Tolkien",308,true);
 
 
 
@@ -260,3 +256,6 @@ bookModal.addEventListener('blur',
     }, true);
 
 
+if(library.children.length === 0 ){
+    library.innerText = "Add your books here"
+}

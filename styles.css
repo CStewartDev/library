@@ -52,6 +52,7 @@ header {
     color: white;
     margin-left: 1rem;
     border-radius: 30%;
+    cursor: pointer;
 }
 
 .addBookPage{
