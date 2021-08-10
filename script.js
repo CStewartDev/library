@@ -4,8 +4,9 @@ const bookModal = document.querySelector('.addBookPage');
 const modalx = document.querySelector('.modal-x');
 const modalAdd = document.querySelector('.addBookFormBtn');
 const modalForm = document.querySelector('.addBookForm');
-let myLibrary = [];
-let ids = 1;
+const search = document.getElementById('search');
+
+//let myLibrary = [];
 let modalUp = false;
 
 function Book(title,author,pages,hasRead) {
@@ -16,12 +17,17 @@ function Book(title,author,pages,hasRead) {
     this.id = null; 
 }
 
-function addBooktoLibrary(title,author,pages,hasRead){
+function createBook(title,author,pages,hasRead) {
     let book = new Book(title,author,pages,hasRead);
-    book.id = `Book ${ids}`
-    ids++;
-    myLibrary.push(book);
-    addCardstoScreen(myLibrary[myLibrary.length-1])
+    book.id = `Book ${localStorage.getItem('UID')}`;
+    return book;
+}
+
+function addBooktoLibrary(title,author,pages,hasRead){
+    let book = createBook(title,author,pages,hasRead);
+    localStorage.setItem('UID',`${Number.parseFloat(localStorage.getItem("UID")) +1}`)
+    if(!localStorage.getItem(book.id)) localStorage.setItem(book.id,JSON.stringify(book));
+    addCardstoScreen(JSON.parse(localStorage[book.id]));
 }
 
 function addCardstoScreen(book){
@@ -51,31 +57,43 @@ function makeCard(item){
             let hasRead = item[prop]; 
             const btns = `
             <button class="formBtn readBtn ${hasRead?"read":""}">
-                ${hasRead?"Read":"Not Read"}</button> 
+                ${hasRead?"Read":"Not Read"}</button>     
             <button class="formBtn delBtn">Delete?</button>`
             modalBtnDiv.innerHTML = btns;
             newDiv.appendChild(modalBtnDiv);
             const readBtn = modalBtnDiv.firstElementChild;
             const delBtn = modalBtnDiv.lastElementChild;
             readBtn.addEventListener('click',e=>this.readToggle(e,item.id));
-            delBtn.addEventListener('click',e=>this.deleteCard(item.id))
+            delBtn.addEventListener('click',e=>this.deleteCard(item.id));
         }
     } 
     return newDiv  
 }
 
+function searchBooks (e) {
+    let searchBook = e.target.value.toLowerCase();
+    //if(searchBook === '') return;
+    document.querySelectorAll('.bookCard').forEach(book => {
+        title = book.firstChild.innerText.toLowerCase();
+        title.includes(searchBook)? book.style.display = "flex" : book.style.display = "none"
+    })
+}
+
 function deleteCard (cardId){
     const toDelete = document.getElementById(cardId);
-    let boop = myLibrary.map(book=>book.id).indexOf(cardId);
-    myLibrary.splice(boop,1);
+    //let boop = myLibrary.map(book=>book.id).indexOf(cardId);
+    //myLibrary.splice(boop,1);
+    localStorage.removeItem(cardId);
     toDelete.remove();
 }
 
 function readToggle (e,cardId) {
-    const card = document.getElementById(cardId).lastElementChild;
-    let boop = myLibrary.map(book=>book.id).indexOf(cardId);
-    myLibrary[boop] = !myLibrary[boop];
-    if(myLibrary[boop]){
+    let beep = JSON.parse(localStorage.getItem(cardId));
+    beep.hasRead = !beep.hasRead;
+    console.log(beep)
+    //myLibrary[boop] = !myLibrary[boop];
+    localStorage.setItem(cardId,JSON.stringify(beep));
+    if(beep.hasRead){
         e.target.innerHTML = "Read";
         e.target.classList.add('read');
     } else{ 
@@ -144,7 +162,7 @@ function showError (field,error){
     message.innerHTML = error;
 
     // Show error message
-    message.style.display = 'block';
+    //message.style.display = 'block';
     message.style.visibility = 'visible';
 
 };
@@ -164,15 +182,16 @@ function removeError (field) {
     if (!message) return;
 
     // If so, hide it
-    message.innerHTML = '';
-    message.style.display = 'none';
+    //message.innerHTML = '';
+    //message.style.display = 'none';
     message.style.visibility = 'hidden';
 };
+
 
 function validateForm() {
     // Get all of the form elements
     let fields = modalForm.elements;
-
+    
     // Validate each field
     // Store the first field with an error to a variable so we can bring it into focus later
     let error, hasErrors;
@@ -189,44 +208,55 @@ function validateForm() {
     if (hasErrors) {
         hasErrors.focus();
         return true
-    }
+    }    
 }
 
 
+function onLoad(){
+    if(!localStorage.getItem("UID")) localStorage.setItem("UID","1");
+    for(let i = 1;i<localStorage.length;i++){
+        if(localStorage.key(i) === "UID") continue;
+        let book = localStorage.getItem(localStorage.key(i));
+        if(!book) continue;
+        addCardstoScreen(JSON.parse(book));
+    }
+}
 
-// Beginning data for cards
-addBooktoLibrary("The Count of Monte Cristo","Alexandre Dumas",1316,true)
-addBooktoLibrary("The Hobbit","J.R.R Tolkien",308,true)
-addBooktoLibrary("LOTR: Fellowship of the Ring","J.R.R Tolkien",308,true)
-addBooktoLibrary("LOTR: The Two Towers","J.R.R Tolkien",308,true)
-addBooktoLibrary("LOTR: Return of the King","J.R.R Tolkien",308,true)
+document.body.onload = onLoad;
+
+
+//Beginning data for cards
+//createBook("The Count of Monte Cristo","Alexandre Dumas",1316,true);
+// createBook("The Hobbit","J.R.R Tolkien",308,true);
+// createBook("LOTR: Fellowship of the Ring","J.R.R Tolkien",308,true);
+// createBook("LOTR: The Two Towers","J.R.R Tolkien",308,true);
+// createBook("LOTR: Return of the King","J.R.R Tolkien",308,true);
 
 
 
 // MODAL EVENT LISTENERS//
 
-modalAdd.addEventListener('click',handleModalAdd,false)
-newBtn.addEventListener('click',toggleModalAppearance)
-modalx.addEventListener('click',toggleModalAppearance)
-//modalAdd.addEventListener('click',handleModalAdd)
+modalAdd.addEventListener('click',handleModalAdd,false);
+newBtn.addEventListener('click',toggleModalAppearance);
+modalx.addEventListener('click',toggleModalAppearance);
+search.addEventListener('keyup',searchBooks);
 window.addEventListener('click',(e)=>{
     if(e.target == bookModal) toggleModalAppearance();
 })
 
 bookModal.addEventListener('blur',
-function (e) {
-    //Validtate Error
-    let error = hasError(e.target);
+    function (e) {
+        //Validtate Error
+        let error = hasError(e.target);
 
-    //if error, show it
-    if(error){
-        showError(e.target, error)
-        return;
-    }
+        //if error, show it
+        if(error){
+            showError(e.target, error)
+            return;
+        }
 
-    removeError(e.target)
+        removeError(e.target)
 
-}, true);
-
+    }, true);
 
 
