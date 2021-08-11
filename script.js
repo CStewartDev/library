@@ -19,21 +19,22 @@ function Book(title,author,pages,hasRead) {
 
 function createBook(title,author,pages,hasRead) {
     let book = new Book(title,author,pages,hasRead);
+    if(!localStorage.getItem("UID")) localStorage.setItem("UID","1");
     book.id = `Book ${localStorage.getItem('UID')}`;
+    localStorage.setItem('UID',`${Number.parseFloat(localStorage.getItem("UID")) +1}`)
     return book;
 }
 
 function addBooktoLibrary(title,author,pages,hasRead){
     let book = createBook(title,author,pages,hasRead);
-    if(!localStorage.getItem("UID")) localStorage.setItem("UID","1");
-    localStorage.setItem('UID',`${Number.parseFloat(localStorage.getItem("UID")) +1}`)
+
     if(!localStorage.getItem(book.id)) localStorage.setItem(book.id,JSON.stringify(book));
     addCardstoScreen(JSON.parse(localStorage[book.id]));
 }
 
 function addCardstoScreen(book){
+    if(library.children.length === 0)library.innerText = "";
         const card = makeCard(book);
-        library.innerText = "";
         library.appendChild(card);
 }
 
@@ -74,7 +75,6 @@ function makeCard(item){
 
 function searchBooks (e) {
     let searchBook = e.target.value.toLowerCase();
-    //if(searchBook === '') return;
     document.querySelectorAll('.bookCard').forEach(book => {
         title = book.firstChild.innerText.toLowerCase();
         title.includes(searchBook)? book.style.display = "flex" : book.style.display = "none"
