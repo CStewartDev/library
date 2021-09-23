@@ -9,12 +9,22 @@ const search = document.getElementById('search');
 //let myLibrary = [];
 let modalUp = false;
 
-function Book(title,author,pages,hasRead) {
-    this.title = title;
-    this.author=author;
-    this.pages = `${pages} ${pages == 1 ?"page":"pages" }`;
-    this.hasRead=hasRead;
-    this.id = null; 
+// function Book(title,author,pages,hasRead) {
+//     this.title = title;
+//     this.author=author;
+//     this.pages = `${pages} ${pages == 1 ?"page":"pages" }`;
+//     this.hasRead=hasRead;
+//     this.id = null; 
+// }
+
+class Book2 {
+    constructor(title,author,pages,hasRead){
+        this.title = title;
+        this.author = author;
+        this.pages = `${pages} ${pages == 1 ?"page":"pages" }`;
+        this.hasRead = hasRead;
+        this.id = null;
+    }
 }
 
 function createBook(title,author,pages,hasRead) {
